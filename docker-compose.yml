@@ -2,7 +2,7 @@ version: '3'
 
 services:
   clash-parser:
-    build: ./app
+    image: ghcr.io/xyqyear/clash-parser
     ports:
       - 8080:80
     volumes:

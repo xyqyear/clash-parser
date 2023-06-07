@@ -26,7 +26,13 @@ WORKDIR /app
 
 COPY poetry.lock pyproject.toml /app/
 
-RUN poetry install --no-interaction --no-cache --no-root --without dev
+RUN apk add --no-cache \
+        gcc \
+        musl-dev \
+    libffi-dev && \poetry install --no-interaction --no-cache --no-root --without dev && \
+    apk del \
+        gcc \
+        musl-dev
 
 FROM python:${PYTHON_VERSION}-alpine as app
 

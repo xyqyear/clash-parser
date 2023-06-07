@@ -14,7 +14,7 @@ The configuration is reloaded everytime a request is made to the server.
 
 ## Installation
 
-### Using Docker
+### Using Docker (WIP)
 
 Make sure you have Docker and the compose plugin installed on your machine.
 

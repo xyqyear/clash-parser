@@ -14,7 +14,7 @@ The configuration is reloaded everytime a request is made to the server.
 
 ## Installation
 
-### Using Docker (WIP)
+### Using Docker
 
 Make sure you have Docker and the compose plugin installed on your machine.
 
@@ -58,7 +58,7 @@ The service exposes several HTTP endpoints:
 
 ## TODO
 
-- [ ] add Dockerfile and docker-compose.yaml
+- [x] add Dockerfile and docker-compose.yaml
 
 ## What's clash, cfw or parser?
 

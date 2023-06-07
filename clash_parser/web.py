@@ -21,7 +21,7 @@ if not PORT:
 elif PORT.isdigit():
     PORT = int(PORT)
 else:
-    logging.error("PARSER_HOST must be an integer")
+    logging.error("PARSER_PORT must be an integer")
     exit(1)
 
 config = Config("config.yaml")

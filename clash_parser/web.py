@@ -129,4 +129,4 @@ async def remove(request):
 def run():
     app = web.Application()
     app.add_routes(routes)
-    web.run_app(app)
+    web.run_app(app, host=HOST, port=PORT)

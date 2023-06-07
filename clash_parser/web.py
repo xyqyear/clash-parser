@@ -4,8 +4,9 @@ import os
 from io import StringIO
 
 from aiohttp import ClientSession, web
-from config import Config
-from parsing import process_yaml
+
+from .config import Config
+from .parsing import process_yaml
 
 working_dir = os.environ.get("PARSER_WORKING_DIR")
 if working_dir:

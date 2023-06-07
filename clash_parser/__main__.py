@@ -1,4 +1,4 @@
-from web import run
+from .web import run
 
 
 if __name__ == "__main__":

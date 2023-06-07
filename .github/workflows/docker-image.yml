@@ -3,9 +3,9 @@ name: Docker Image CI
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
-permissions: 
+permissions:
   packages: write
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            {{github.repository_name}}
+            ${{ github.event.repository.name }}
           # Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}}

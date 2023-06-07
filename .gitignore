@@ -1,0 +1,6 @@
+*.pyc
+.coverage
+coverage.xml
+*.yaml
+
+.vscode/

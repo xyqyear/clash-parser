@@ -8,20 +8,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 RUN apk add --no-cache \
-        rust \
-        cargo \
-        curl \
         gcc \
-        libressl-dev \
         musl-dev \
         libffi-dev && \
     pip install --no-cache-dir poetry==${POETRY_VERSION} && \
     apk del \
-        rust \
-        cargo \
-        curl \
         gcc \
-        libressl-dev \
         musl-dev \
         libffi-dev
 
@@ -34,13 +26,7 @@ WORKDIR /app
 
 COPY poetry.lock pyproject.toml /app/
 
-RUN apk add --no-cache \
-        gcc \
-        musl-dev && \
-    poetry install --no-interaction --no-cache --no-root --without dev && \
-    apk del \
-        gcc \
-        musl-dev
+RUN poetry install --no-interaction --no-cache --no-root --without dev
 
 FROM python:${PYTHON_VERSION}-alpine as app
 

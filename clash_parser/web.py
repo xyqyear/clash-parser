@@ -17,7 +17,7 @@ if not HOST:
     HOST = "localhost"
 PORT = os.environ.get("PARSER_PORT")
 if not PORT:
-    PORT = 80
+    PORT = 8080
 elif PORT.isdigit():
     PORT = int(PORT)
 else:
@@ -37,7 +37,9 @@ async def try_get(url):
             async with ClientSession() as session:
                 async with session.get(url) as response:
                     response.raise_for_status()
-                    return await response.text()
+                    response_headers = response.headers
+                    response_text = await response.text()
+                    return response_headers, response_text
         except Exception as e:
             logging.warning(e)
             logging.warning(f"Retrying after {retry_wait} seconds")
@@ -60,7 +62,7 @@ async def parse_with_url(profile_url, reload_config=True):
     except Exception as e:
         logging.warning(e)
         return web.Response(status=500)
-    profile = profile_get_task.result()
+    original_headers, profile = profile_get_task.result()
 
     buffer = StringIO()
     try:
@@ -69,7 +71,8 @@ async def parse_with_url(profile_url, reload_config=True):
         logging.warning(e)
         return web.Response(status=500)
 
-    return web.Response(text=buffer.getvalue())
+    headers = {'subscription-userinfo': original_headers.get('subscription-userinfo', '')}
+    return web.Response(text=buffer.getvalue(), headers=headers)
 
 
 @routes.get("/parse")

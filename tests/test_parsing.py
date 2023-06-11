@@ -161,6 +161,18 @@ command_test_pairs = [
         ),
         {"hosts": {"facebook.com": "111.222.333.444"}},
     ),
+    (
+        (
+            {
+                "hosts": {
+                    "google.com": "111.222.333.444",
+                    "facebook.com": "111.222.333.444",
+                }
+            },
+            "hosts-",
+        ),
+        {},
+    ),
 ]
 
 

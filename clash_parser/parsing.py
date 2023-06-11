@@ -7,9 +7,14 @@ from ruamel.yaml import YAML
 def process_command(yaml_dict, command):
     # this regex only matches `+` or `-` if it is preceded by a digit
     # so that we can use `+` or `-` in the locator
-    locator, operation, value = re.match(
-        r"^(.*?)((?<=\d)[+-]|=)(.*)$", command
-    ).groups()
+    if match := re.match(r"^(.*?)((?<=\d)[+-]|=)(.*)$", command):
+        locator, operation, value = match.groups()
+    elif command.endswith("-"):
+        locator = command[:-1]
+        operation = "-"
+        value = ""
+    else:
+        raise ValueError(f"Invalid command {command}")
 
     parts = locator.split(".")
     keys = []
@@ -96,9 +101,13 @@ def process_command(yaml_dict, command):
             raise TypeError(f'Operation "+" is only supported for array at {locator}')
         target.insert(key, value)
     elif operation == "-":
-        if not isinstance(target, list):
-            raise TypeError(f'Operation "-" is only supported for array at {locator}')
-        target.pop(key)
+        match target:
+            case list():
+                target.pop(key)
+            case dict():
+                del target[key]
+            case _:
+                raise TypeError(f'Operation "-" is only supported for array and object at {locator}')
 
 
 def process_yaml(original_yaml: str, processing_rules: dict, stream) -> str:

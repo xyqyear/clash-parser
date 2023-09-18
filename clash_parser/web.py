@@ -30,28 +30,20 @@ logging.basicConfig(level=logging.INFO)
 routes = web.RouteTableDef()
 
 
-async def try_get(url):
-    retry_wait = 1
-    while True:
-        try:
-            async with ClientSession() as session:
-                async with session.get(url) as response:
-                    response.raise_for_status()
-                    response_headers = response.headers
-                    response_text = await response.text()
-                    return response_headers, response_text
-        except Exception as e:
-            logging.warning(e)
-            logging.warning(f"Retrying after {retry_wait} seconds")
-            await asyncio.sleep(retry_wait)
-            retry_wait *= 1.2
+async def get(url):
+    async with ClientSession() as session:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            response_headers = response.headers
+            response_text = await response.text()
+            return response_headers, response_text
 
 
 async def parse_with_url(profile_url, reload_config=True):
     if not (parser := config.get_parser_for_url(profile_url)):
         return web.Response(status=404)
 
-    profile_get_task = asyncio.create_task(try_get(profile_url))
+    profile_get_task = asyncio.create_task(get(profile_url))
     tasks = [profile_get_task]
     if reload_config:
         config_load_task = asyncio.create_task(config.load())

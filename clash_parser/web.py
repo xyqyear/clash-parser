@@ -32,7 +32,7 @@ routes = web.RouteTableDef()
 
 async def get(url):
     async with ClientSession() as session:
-        async with session.get(url) as response:
+        async with session.get(url, verify_ssl=False) as response:
             response.raise_for_status()
             response_headers = response.headers
             response_text = await response.text()

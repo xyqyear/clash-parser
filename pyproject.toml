@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clash-parser"
-version = "0.5.0"
+version = "0.6.0"
 description = "an implementation of the Parser feature from CFW, but with HTTP API"
 authors = ["xyqyear <xyqyear@gmail.com>"]
 readme = "README.md"

@@ -107,10 +107,12 @@ def process_command(yaml_dict, command):
             case dict():
                 del target[key]
             case _:
-                raise TypeError(f'Operation "-" is only supported for array and object at {locator}')
+                raise TypeError(
+                    f'Operation "-" is only supported for array and object at {locator}'
+                )
 
 
-def process_yaml(original_yaml: str, processing_rules: dict, stream) -> str:
+def process_yaml(original_yaml: str, processing_rules: dict, stream) -> None:
     yaml = YAML()
     yaml.preserve_quotes = True
     original_dict = yaml.load(original_yaml)
@@ -118,13 +120,22 @@ def process_yaml(original_yaml: str, processing_rules: dict, stream) -> str:
     for key, value in processing_rules.items():
         if "append-" in key:
             key = key.replace("append-", "")
-            original_dict[key].extend(value)
+            if key not in original_dict:
+                original_dict[key] = value
+            else:
+                original_dict[key].extend(value)
         elif "prepend-" in key:
             key = key.replace("prepend-", "")
-            original_dict[key] = value + original_dict[key]
+            if key not in original_dict:
+                original_dict[key] = value
+            else:
+                original_dict[key] = value + original_dict[key]
         elif "mix-" in key:
             key = key.replace("mix-", "")
-            original_dict[key].update(value)
+            if key not in original_dict:
+                original_dict[key] = value
+            else:
+                original_dict[key].update(value)
         elif "commands" in key:
             for command in value:
                 process_command(original_dict, command)
